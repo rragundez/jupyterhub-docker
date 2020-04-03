@@ -8,5 +8,4 @@ dependencies:
   - ipykernel
   - pip:
     - fire
-    - oauthenticator
     - PyJWT

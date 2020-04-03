@@ -35,6 +35,7 @@ RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -
   && $PYTHON -m ipykernel install --name $PYTHON_ENV_NAME --display-name="AA Factory $PYTHON_ENV_NAME" \
   && $CONDA install notebook -y \
   && $CONDA install -c conda-forge jupyterhub jupyterlab -y \
+  && $MINICONDA_PATH/bin/python -m pip install oauthenticator \
   && $MINICONDA_PATH/bin/python -m jupyter kernelspec remove -f python3 \
   && $MINICONDA_PATH/bin/python -m pip uninstall ipykernel -y \
   && $CONDA clean --all -y \
@@ -61,11 +62,12 @@ RUN mkdir -p /etc/jupyter/conf \
   && mv jupyterhub_config.py /etc/jupyter/conf/jupyterhub_config.py
 
 EXPOSE 9443
+ENV MINICONDA_PATH=$MINICONDA_PATH
 ENV PATH=$PATH:$MINICONDA_PATH/bin
 ENV SPARK_HOME=/usr/lib/spark
 ENV PYSPARK_DRIVER_PYTHON=$MINICONDA_PATH/envs/$PYTHON_ENV_NAME/bin/python
 ENV PYSPARK_PYTHON=$MINICONDA_PATH/envs/$PYTHON_ENV_NAME/bin/python
-CMD ["jupyterhub", "-f", "/etc/jupyter/conf/jupyterhub_config.py"]
+CMD ["bash", "-c", "$MINICONDA_PATH/bin/jupyterhub -f /etc/jupyter/conf/jupyterhub_config.py"]
 
 # if it is as a service
 # COPY jupyterhub.service /etc/systemd/system/jupyterhub.service
