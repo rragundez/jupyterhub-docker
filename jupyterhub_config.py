@@ -1,10 +1,16 @@
+import os
+from oauthenticator.azuread import AzureAdOAuthenticator
+
 # Configuration file for jupyterhub.
 
 c.JupyterHub.port = 9443
 # will automatically redirect to JupyterLab
 c.Spawner.default_url = '/lab'
-c.JupyterHub.admin_users = {'jupyterhub_admin'}
-c.JupyterHub.authenticator_class = 'jupyterhub.auth.PAMAuthenticator'
+
+c.JupyterHub.admin_users = {'admin'}
+# c.JupyterHub.authenticator_class = 'jupyterhub.auth.PAMAuthenticator'
+c.JupyterHub.authenticator_class = AzureAdOAuthenticator
+
 c.JupyterHub.cookie_max_age_days = 1
 c.KernelSpecManager.ensure_native_kernel = False
 # Set the log level by value or name.
@@ -32,6 +38,12 @@ c.LocalAuthenticator.group_whitelist = {'developers'}
 # but PySpark needs this environment variable to run on top
 # of the correct Spark setup using YARN. If not it will
 # start as standalone.
+
+c.AzureAdOAuthenticator.tenant_id = os.environ.get('AAD_TENANT_ID')
+c.AzureAdOAuthenticator.oauth_callback_url = os.environ.get('AAD_OAUTH_CALLBACK_URL')
+c.AzureAdOAuthenticator.client_id = os.environ.get('AAD_CLIENT_ID')
+c.AzureAdOAuthenticator.client_secret = os.environ.get('AAD_CLIENT_SECRET')
+
 c.Spawner.env_keep = [
     'SPARK_HOME',
     'PYSPARK_DRIVER_PYTHON',
