@@ -1,25 +1,6 @@
 import os
-
-"""
-Custom Authenticator to use Azure AD with JupyterHub
-"""
-
-import json
-import jwt
-import os
-import urllib
 import subprocess
 import pwd
-
-from tornado.auth import OAuth2Mixin
-from tornado.log import app_log
-from tornado.httpclient import HTTPRequest, AsyncHTTPClient
-
-from jupyterhub.auth import LocalAuthenticator
-
-from traitlets import Unicode, default
-
-from oauthenticator.oauth2 import OAuthLoginHandler, OAuthenticator
 
 from oauthenticator.azuread import AzureAdOAuthenticator
 
