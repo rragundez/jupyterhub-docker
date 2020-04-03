@@ -29,7 +29,7 @@ c.JupyterHub.extra_log_file = '/var/log/jupyterhub.log'
 # which we do not want as we want to create them via
 # script in the machine such that we control
 # the user home setup.
-c.LocalAuthenticator.create_system_users = False
+c.LocalAuthenticator.create_system_users = True
 # allow only users in the developers system group
 c.LocalAuthenticator.group_whitelist = {'developers'}
 # whitelist of environment variables for the single-user server
