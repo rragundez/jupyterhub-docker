@@ -55,11 +55,14 @@ RUN sudo -u $JUPYTERHUB_ADMIN_USER bash -c "mkdir -p $HOME/$JUPYTERHUB_ADMIN_USE
 
 
 ARG JUPYTERHUB_CONFIG_FILE=jupyterhub_config.py
+ARG JUPYTERHUB_LOGIN_HTML=login.html
 
 COPY $JUPYTERHUB_CONFIG_FILE jupyterhub_config.py
+COPY $JUPYTERHUB_LOGIN_HTML login.html
 
 RUN mkdir -p /etc/jupyter/conf \
-  && mv jupyterhub_config.py /etc/jupyter/conf/jupyterhub_config.py
+  && mv jupyterhub_config.py /etc/jupyter/conf/jupyterhub_config.py \
+  && mv login.html /etc/jupyter/conf/login.html
 
 EXPOSE 9443
 ENV MINICONDA_PATH=$MINICONDA_PATH

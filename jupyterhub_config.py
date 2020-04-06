@@ -29,6 +29,7 @@ c.Spawner.default_url = '/lab'
 c.JupyterHub.authenticator_class = MyOAutehnticator
 c.JupyterHub.cookie_max_age_days = 1
 c.KernelSpecManager.ensure_native_kernel = False
+c.JupyterHub.template_paths=['/etc/jupyter/conf']
 # Set the log level by value or name.
 c.JupyterHub.log_level = 'INFO'
 # logging of the single-user server
