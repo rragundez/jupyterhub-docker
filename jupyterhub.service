@@ -1,0 +1,17 @@
+[Unit]
+Description=Jupyterhub
+After=network-online.target
+
+[Service]
+User=root
+Restart=always
+RestartSec=1
+EnvironmentFile=/etc/jupyter/conf/.env
+Environment=PATH=$PATH:/opt/miniconda/bin
+Environment=SPARK_HOME=/usr/lib/spark
+Environment=PYSPARK_DRIVER_PYTHON=/opt/miniconda/envs/Python3.7/bin/python
+Environment=PYSPARK_PYTHON=/opt/miniconda/envs/Python3.7/bin/python
+ExecStart=/opt/miniconda/bin/jupyterhub -f /etc/jupyter/conf/jupyterhub_config.py
+
+[Install]
+WantedBy=multi-user.target

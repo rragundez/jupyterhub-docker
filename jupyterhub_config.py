@@ -12,13 +12,43 @@ class MyOAutehnticator(AzureAdOAuthenticator):
         return userdict
 
 
+def change_user(user_uid, user_gid):
+    def result():
+        os.setgid(user_gid)
+        os.setuid(user_uid)
+    return result
+
+
 def pre_spawn_hook(spawner):
     username = spawner.user.name
+    firstname, lastname = username.split('_')
     try:
         pwd.getpwnam(username)
     except KeyError:
+        subprocess.check_call(['useradd', '-ms', '/bin/bash', '-N', '-d', f'/home/{username}', username])
+        pw_record = pwd.getpwnam(username)
+        username = pw_record.pw_name
+        home_dir = pw_record.pw_dir
+        uid = pw_record.pw_uid
+        gid = pw_record.pw_gid
+        env = os.environ.copy()
+        env['HOME'] = home_dir
+        env['LOGNAME'] = username
+        env['USER'] = username
         subprocess.check_call(
-            ['useradd', '-ms', '/bin/bash', '-N', username]
+            ['conda', 'init', 'bash'],
+            preexec_fn=change_user(uid, gid),
+            env=env
+        )
+        subprocess.check_call(
+            ['git', 'config', '--global', 'user.name', f"{firstname} {lastname}".title()],
+            preexec_fn=change_user(uid, gid),
+            env=env
+        )
+        subprocess.check_call(
+            ['git', 'config', '--global', 'user.email', f"{firstname}.{lastname}@provider.com"],
+            preexec_fn=change_user(uid, gid),
+            env=env
         )
 
 # Configuration file for jupyterhub.

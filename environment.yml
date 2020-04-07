@@ -9,3 +9,4 @@ dependencies:
   - pip:
     - fire
     - PyJWT
+    - pipenv
